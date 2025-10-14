@@ -1,140 +1,140 @@
-# 🚀 Быстрый старт - AI Marketing
+# 🚀 Quick Start - AI Marketing
 
-## За 5 минут до первого результата!
+## Get your first results in 5 minutes!
 
-### Шаг 1: Установка (2 минуты)
+### Step 1: Installation (2 minutes)
 
 ```bash
-# Перейдите в директорию проекта
+# Navigate to project directory
 cd "/Users/4zik/Work/AI Marketing"
 
-# Создайте виртуальное окружение
+# Create virtual environment
 python3 -m venv venv
 
-# Активируйте его
+# Activate it
 source venv/bin/activate  # macOS/Linux
 
-# Установите зависимости
+# Install dependencies
 pip install -r requirements.txt
-pip install -r requirements_web.txt  # Для веб-приложения
+pip install -r requirements_web.txt  # For web application
 ```
 
-### Шаг 2: Настройка API ключа (1 минута)
+### Step 2: API Key Setup (1 minute)
 
-1. Получите БЕСПЛАТНЫЙ API ключ от Google: https://makersuite.google.com/app/apikey
+1. Get a FREE API key from Google: https://makersuite.google.com/app/apikey
 
-2. Создайте файл `.env`:
+2. Create `.env` file:
 ```bash
 echo "GOOGLE_API_KEY=your_key_here" > .env
 echo "AI_PROVIDER=google" >> .env
 echo "AI_MODEL=gemini-2.0-flash" >> .env
 ```
 
-3. Отредактируйте `.env` файл и добавьте ваш ключ:
+3. Edit the `.env` file and add your key:
 ```env
 GOOGLE_API_KEY=AIzaSyB...your_actual_key_here
 AI_PROVIDER=google
 AI_MODEL=gemini-2.0-flash
 ```
 
-### Шаг 3: Первый запуск (2 минуты)
+### Step 3: First Run (2 minutes)
 
-#### 🌐 Веб-приложение (Рекомендуется)
+#### 🌐 Web Application (Recommended)
 ```bash
 python web_app.py
-# Откройте браузер: http://localhost:8000
+# Open browser: http://localhost:8000
 ```
 
-#### 💻 Командная строка
+#### 💻 Command Line
 ```bash
 python main.py analyze https://example.com
 ```
 
-## 📊 Что вы получите?
+## 📊 What Will You Get?
 
-Excel файл с листами:
-- ✅ Информация о сайте
-- ✅ FAB анализ (Features-Advantages-Benefits)
-- ✅ Готовые объявления Google Ads
-- ✅ Ключевые слова
+Excel file with sheets:
+- ✅ Website information
+- ✅ FAB analysis (Features-Advantages-Benefits)
+- ✅ Ready Google Ads
+- ✅ Keywords
 
-## 💡 Примеры команд
+## 💡 Command Examples
 
 ```bash
-# Полный анализ
+# Full analysis
 python main.py analyze https://mysite.com
 
-# Только ключевые слова
+# Keywords only
 python main.py analyze https://mysite.com --keywords-only
 
-# С указанием имени файла
+# With custom filename
 python main.py analyze https://mysite.com --output my_ads.xlsx
 
-# Просто парсинг (без AI)
+# Parsing only (no AI)
 python main.py parse https://mysite.com
 ```
 
-## 🆓 БЕСПЛАТНЫЕ AI провайдеры
+## 🆓 FREE AI Providers
 
-### Google Gemini (Рекомендуется)
-- ✅ 60 запросов/минуту БЕСПЛАТНО
-- ✅ Отличное качество
-- ✅ Работает сразу
+### Google Gemini (Recommended)
+- ✅ 60 requests/minute FREE
+- ✅ Excellent quality
+- ✅ Works immediately
 
-### Groq (Альтернатива)
-- ✅ 30 запросов/минуту БЕСПЛАТНО
-- ✅ Очень быстро
-- ✅ Хорошее качество
+### Groq (Alternative)
+- ✅ 30 requests/minute FREE
+- ✅ Very fast
+- ✅ Good quality
 
-### Ollama (Локально)
-- ✅ 100% БЕСПЛАТНО навсегда
-- ✅ Работает без интернета
-- ⚠️ Требует установки
+### Ollama (Local)
+- ✅ 100% FREE forever
+- ✅ Works without internet
+- ⚠️ Requires installation
 
-## 🆘 Проблемы?
+## 🆘 Problems?
 
-### Ошибка: "No module named 'google'"
+### Error: "No module named 'google'"
 ```bash
 pip install google-generativeai
 ```
 
-### Ошибка: "API key not found"
-Проверьте файл `.env` - ключ должен начинаться с `AIza`
+### Error: "API key not found"
+Check the `.env` file - key should start with `AIza`
 
-### Ошибка при парсинге сайта
-Некоторые сайты блокируют парсинг. Попробуйте другой URL.
+### Website parsing error
+Some websites block parsing. Try a different URL.
 
-### Порт 5000 занят
+### Port 5000 busy
 ```bash
-# Веб-приложение автоматически использует порт 8000
+# Web app automatically uses port 8000
 python web_app.py
-# Откройте: http://localhost:8000
+# Open: http://localhost:8000
 ```
 
-## 🎯 Следующие шаги
+## 🎯 Next Steps
 
-- Прочитайте полную документацию: [README.md](README.md)
-- Посмотрите примеры кода: [example_usage.py](example_usage.py)
-- Изучите методологию FAB в коде
+- Read full documentation: [README.md](README.md)
+- Check code examples: [example_usage.py](example_usage.py)
+- Study FAB methodology in code
 
-## 💰 Стоимость
+## 💰 Cost
 
-**Google Gemini (рекомендуется):**
-- 🆓 **БЕСПЛАТНО** до 60 запросов в минуту
-- 🆓 **БЕСПЛАТНО** до 1,500 запросов в день
+**Google Gemini (recommended):**
+- 🆓 **FREE** up to 60 requests per minute
+- 🆓 **FREE** up to 1,500 requests per day
 
 **Groq:**
-- 🆓 **БЕСПЛАТНО** до 30 запросов в минуту
-- 🆓 **БЕСПЛАТНО** до 14,400 запросов в день
+- 🆓 **FREE** up to 30 requests per minute
+- 🆓 **FREE** up to 14,400 requests per day
 
 **Ollama:**
-- 🆓 **100% БЕСПЛАТНО** навсегда (локально)
+- 🆓 **100% FREE** forever (local)
 
-## 📞 Нужна помощь?
+## 📞 Need Help?
 
-Проверьте лог-файл:
+Check the log file:
 ```bash
 cat ai_marketing.log
 ```
 
-Счастливого маркетинга! 🎉
+Happy marketing! 🎉

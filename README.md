@@ -1,334 +1,333 @@
-# AI Marketing - Генератор рекламных материалов
+# AI Marketing - Advertising Content Generator
 
-Интеллектуальное Python-приложение для автоматической генерации рекламных материалов на основе методологии FAB (Features, Advantages, Benefits).
+Intelligent Python application for automatic generation of advertising materials based on the FAB methodology (Features, Advantages, Benefits).
 
-## 🎯 Возможности
+## 🎯 Features
 
-- **Парсинг контента сайта** - автоматическое извлечение информации с веб-сайтов
-- **FAB анализ** - применение методологии Features-Advantages-Benefits к контенту
-- **Генерация ключевых слов** - создание релевантных ключевых слов для SEO и контекстной рекламы
-- **Создание объявлений Google Ads** - автоматическая генерация объявлений с учетом технических ограничений
-- **Экспорт в Excel** - удобные таблицы для дальнейшей работы
+- **Website Content Parsing** - Automatic information extraction from websites
+- **FAB Analysis** - Application of Features-Advantages-Benefits methodology to content
+- **Keyword Generation** - Creation of relevant keywords for SEO and contextual advertising
+- **Google Ads Creation** - Automatic ad generation with technical constraints compliance
+- **Excel Export** - Convenient tables for further work
 
-## 📋 Требования
+## 📋 Requirements
 
 - Python 3.8+
-- API ключ от OpenAI или Anthropic
+- API key from OpenAI or Anthropic
 
-## 🚀 Установка
+## 🚀 Installation
 
-1. Клонируйте репозиторий или скачайте файлы:
+1. Clone the repository or download files:
 ```bash
 cd "/Users/4zik/Work/AI Marketing"
 ```
 
-2. Создайте виртуальное окружение:
+2. Create a virtual environment:
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # На macOS/Linux
-# или
-venv\Scripts\activate  # На Windows
+source venv/bin/activate  # On macOS/Linux
+# or
+venv\Scripts\activate  # On Windows
 ```
 
-3. Установите зависимости:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Создайте файл `.env` с вашими API ключами:
+4. Create `.env` file with your API keys:
 ```bash
 cp .env.example .env
 ```
 
-5. Отредактируйте `.env` файл и добавьте ваш API ключ:
+5. Edit the `.env` file and add your API key:
 ```env
-# Для OpenAI (рекомендуется)
+# For OpenAI (recommended)
 OPENAI_API_KEY=sk-your-key-here
 AI_PROVIDER=openai
 AI_MODEL=gpt-4-turbo-preview
 
-# Или для Anthropic
+# Or for Anthropic
 # ANTHROPIC_API_KEY=your-key-here
 # AI_PROVIDER=anthropic
 # AI_MODEL=claude-3-sonnet-20240229
 ```
 
-## 💡 Использование
+## 💡 Usage
 
-### Полный анализ сайта
+### Complete Website Analysis
 
-Парсит сайт, анализирует по методологии FAB, генерирует ключевые слова и объявления:
+Parses website, analyzes with FAB methodology, generates keywords and ads:
 
 ```bash
 python main.py analyze https://example.com
 ```
 
-С указанием имени файла:
+With custom filename:
 ```bash
 python main.py analyze https://example.com --output my_report.xlsx
 ```
 
-С выбором AI провайдера:
+With AI provider selection:
 ```bash
 python main.py analyze https://example.com --ai-provider openai --model gpt-4
 ```
 
-### Генерация только ключевых слов
+### Keywords Only Generation
 
 ```bash
 python main.py analyze https://example.com --keywords-only
 ```
 
-### Парсинг без AI анализа
+### Parsing Without AI Analysis
 
-Только извлечение контента сайта:
+Content extraction only:
 ```bash
 python main.py parse https://example.com
 ```
 
-С сохранением в JSON:
+With JSON saving:
 ```bash
 python main.py parse https://example.com --output data.json
 ```
 
-### Просмотр конфигурации
+### View Configuration
 
 ```bash
 python main.py config-info
 ```
 
-### Помощь по командам
+### Command Help
 
 ```bash
 python main.py --help
 python main.py analyze --help
 ```
 
-## 📊 Структура проекта
+## 📊 Project Structure
 
 ```
 AI Marketing/
-├── main.py                 # Главное приложение с CLI
-├── config.py              # Конфигурация
-├── requirements.txt       # Зависимости
-├── .env                   # API ключи (создайте сами)
-├── .env.example          # Пример конфигурации
-├── README.md             # Документация
+├── main.py                 # Main application with CLI
+├── config.py              # Configuration
+├── requirements.txt       # Dependencies
+├── .env                   # API keys (create yourself)
+├── .env.example          # Configuration example
+├── README.md             # Documentation
 │
-├── parsers/              # Модули парсинга
+├── parsers/              # Parsing modules
 │   ├── __init__.py
-│   └── website_parser.py # Парсер сайтов
+│   └── website_parser.py # Website parser
 │
-├── fab/                  # FAB методология
+├── fab/                  # FAB methodology
 │   ├── __init__.py
-│   └── fab_methodology.py # Логика FAB
+│   └── fab_methodology.py # FAB logic
 │
-├── ai/                   # AI генерация
+├── ai/                   # AI generation
 │   ├── __init__.py
-│   └── ai_generator.py   # Работа с AI API
+│   └── ai_generator.py   # AI API integration
 │
-├── exporters/            # Экспорт данных
+├── exporters/            # Data export
 │   ├── __init__.py
-│   └── excel_exporter.py # Экспорт в Excel
+│   └── excel_exporter.py # Excel export
 │
-└── output/               # Выходные файлы (создается автоматически)
+└── output/               # Output files (created automatically)
 ```
 
-## 🎓 Методология FAB
+## 🎓 FAB Methodology
 
-### Что такое FAB?
+### What is FAB?
 
-FAB (Features, Advantages, Benefits) - это проверенная методология продаж и маркетинга:
+FAB (Features, Advantages, Benefits) is a proven sales and marketing methodology:
 
-1. **Feature (Характеристика)** - что вы продаете, технические параметры
-2. **Advantage (Преимущество)** - почему это хорошо
-3. **Benefit (Выгода)** - какую ценность получит клиент
+1. **Feature (Characteristic)** - what you sell, technical parameters
+2. **Advantage (Benefit)** - why it's good
+3. **Benefit (Value)** - what value the client gets
 
-### Метод BAB (Обратный FAB)
+### BAB Method (Reverse FAB)
 
-Для эмоционального воздействия используйте обратный порядок:
+For emotional impact, use reverse order:
 **Benefit → Advantage → Feature**
 
-**Пример:**
-- ❌ Плохо: "У нас камера 24 мегапикселя" (Feature)
-- ✅ Хорошо: "Запечатлейте каждую деталь ваших воспоминаний (Benefit) благодаря кристально четким снимкам (Advantage) с матрицей 24 мегапикселя (Feature)"
+**Example:**
+- ❌ Bad: "We have a 24-megapixel camera" (Feature)
+- ✅ Good: "Capture every detail of your memories (Benefit) with crystal-clear shots (Advantage) using a 24-megapixel sensor (Feature)"
 
-## 📦 Выходные файлы
+## 📦 Output Files
 
-Приложение создает Excel файлы со следующими листами:
+The application creates Excel files with the following sheets:
 
-### Полный отчет (`complete_report_*.xlsx`)
-1. **Website Info** - информация о сайте
-2. **FAB Analysis** - анализ по методологии FAB
-3. **Google Ads** - готовые объявления
+### Complete Report (`complete_report_*.xlsx`)
+1. **Website Info** - website information
+2. **FAB Analysis** - FAB methodology analysis
+3. **Google Ads** - ready-made advertisements
 
-### Только объявления (`google_ads_*.xlsx`)
-1. **All Ads** - все варианты объявлений
-2. **Headlines** - только заголовки с проверкой длины
-3. **Descriptions** - только описания с проверкой длины
-4. **Keywords** - ключевые слова по группам
+### Ads Only (`google_ads_*.xlsx`)
+1. **All Ads** - all ad variations
+2. **Headlines** - headlines only with length validation
+3. **Descriptions** - descriptions only with length validation
+4. **Keywords** - keywords by groups
 
-## 🔧 Технические параметры Google Ads
+## 🔧 Google Ads Technical Parameters
 
-Приложение автоматически следит за ограничениями Google Ads:
+The application automatically monitors Google Ads limitations:
 
-- **Заголовок (Headline)**: максимум 30 символов
-- **Описание (Description)**: максимум 90 символов
-- **Путь (Path)**: максимум 15 символов
+- **Headline**: maximum 30 characters
+- **Description**: maximum 90 characters
+- **Path**: maximum 15 characters
 
-## 🤖 Поддерживаемые AI модели
+## 🤖 Supported AI Models
 
-### OpenAI (рекомендуется)
-- `gpt-4-turbo-preview` - самая мощная модель (рекомендуется)
-- `gpt-4` - стабильная версия GPT-4
-- `gpt-3.5-turbo` - быстрая и дешевая
+### OpenAI (recommended)
+- `gpt-4-turbo-preview` - most powerful model (recommended)
+- `gpt-4` - stable GPT-4 version
+- `gpt-3.5-turbo` - fast and cheap
 
 ### Anthropic
-- `claude-3-opus-20240229` - самая мощная модель Claude
-- `claude-3-sonnet-20240229` - баланс скорости и качества
+- `claude-3-opus-20240229` - most powerful Claude model
+- `claude-3-sonnet-20240229` - balance of speed and quality
 
-## 📝 Примеры использования
+## 📝 Usage Examples
 
-### Пример 1: Анализ интернет-магазина
+### Example 1: E-commerce Store Analysis
 
 ```bash
 python main.py analyze https://myshop.com --output shop_ads.xlsx
 ```
 
-Результат:
-- Анализ продуктов и услуг
-- 5-7 вариантов объявлений
-- Ключевые слова для разных типов соответствия
-- Готовый Excel файл для загрузки в Google Ads
+Result:
+- Product and service analysis
+- 5-7 ad variations
+- Keywords for different match types
+- Ready Excel file for Google Ads upload
 
-### Пример 2: Только ключевые слова для SEO
+### Example 2: SEO Keywords Only
 
 ```bash
 python main.py analyze https://myblog.com --keywords-only --output seo_keywords.xlsx
 ```
 
-### Пример 3: Быстрый парсинг конкурента
+### Example 3: Quick Competitor Parsing
 
 ```bash
 python main.py parse https://competitor.com --output competitor_data.json
 ```
 
-## 🔐 Безопасность
+## 🔐 Security
 
-- Никогда не коммитьте файл `.env` с API ключами
-- API ключи хранятся только локально
-- Все запросы к AI API используют HTTPS
+- Never commit the `.env` file with API keys
+- API keys are stored locally only
+- All AI API requests use HTTPS
 
-## 🐛 Отладка
+## 🐛 Debugging
 
-Логи сохраняются в файл `ai_marketing.log`:
+Logs are saved to `ai_marketing.log` file:
 
 ```bash
-tail -f ai_marketing.log  # Просмотр в реальном времени
+tail -f ai_marketing.log  # Real-time viewing
 ```
 
-## 📈 Лучшие практики
+## 📈 Best Practices
 
-1. **Для лучших результатов** - используйте GPT-4
-2. **Для скорости** - используйте GPT-3.5-turbo
-3. **Для точности** - анализируйте главную страницу или страницу продукта
-4. **Для разнообразия** - запускайте анализ несколько раз с разными страницами
+1. **For best results** - use GPT-4
+2. **For speed** - use GPT-3.5-turbo
+3. **For accuracy** - analyze main page or product page
+4. **For variety** - run analysis multiple times with different pages
 
-## 🛠️ Разработка
+## 🛠️ Development
 
-### Установка в режиме разработки
+### Development Mode Installation
 
 ```bash
 pip install -e .
 ```
 
-### Запуск тестов
+### Run Tests
 
 ```bash
 pytest tests/
 ```
 
-## 📄 Лицензия
+## 📄 License
 
 MIT License
 
-## 🤝 Поддержка
+## 🤝 Support
 
-При возникновении проблем:
-1. Проверьте файл `ai_marketing.log`
-2. Убедитесь, что API ключ корректен
-3. Проверьте подключение к интернету
-4. Убедитесь, что сайт доступен для парсинга
+If you encounter problems:
+1. Check the `ai_marketing.log` file
+2. Make sure the API key is correct
+3. Check internet connection
+4. Ensure the website is accessible for parsing
 
 ## 🚀 Roadmap
 
-- [x] **Поддержка Google Ads API для прямой загрузки** ✅ (через MCP Server)
-- [x] **Веб-интерфейс** ✅
-- [ ] Анализ конкурентов
-- [ ] A/B тестирование объявлений
-- [ ] Интеграция с Yandex.Direct
-- [ ] Мультиязычная поддержка
-- [ ] Анализ эффективности объявлений
+- [x] **Google Ads API Direct Upload Support** ✅ (via MCP Server)
+- [x] **Web Interface** ✅
+- [ ] Competitor Analysis
+- [ ] A/B Testing for Ads
+- [ ] Yandex.Direct Integration
+- [ ] Multi-language Support
+- [ ] Ad Performance Analysis
 
 ## 🆕 Google Ads API Integration (NEW!)
 
-Теперь приложение интегрировано с **Google Ads API MCP Server**!
+The application is now integrated with **Google Ads API MCP Server**!
 
-### Возможности:
+### Capabilities:
 
-- 📊 **Отчеты по кампаниям** - получайте метрики производительности
-- 🔍 **Анализ ключевых слов** - показатели качества, CTR, стоимость
-- 🎯 **Диагностика** - находите проблемные места автоматически
-- 💬 **Естественный язык** - задавайте вопросы о данных на обычном языке
-- 📈 **Аналитика по географии и устройствам**
+- 📊 **Campaign Reports** - Get performance metrics
+- 🔍 **Keyword Analysis** - Quality scores, CTR, cost metrics
+- 🎯 **Diagnostics** - Automatically find problem areas
+- 💬 **Natural Language** - Ask questions about data in plain language
+- 📈 **Geographic and Device Analytics**
 
-### Быстрый старт:
+### Quick Start:
 
 ```bash
-# Установить зависимости
+# Install dependencies
 pip install google-ads PyYAML
 
-# Настроить credentials
+# Setup credentials
 cp google-ads.yaml.example google-ads.yaml
-# Заполните ваши API ключи
+# Fill in your API keys
 
-# Проверить кампании
+# Check campaigns
 python main.py google-ads campaigns
 
-# Запустить диагностику
+# Run diagnostics
 python main.py google-ads diagnose-quality
 ```
 
-📖 **Полная документация**: 
-- Быстрый старт: `QUICKSTART_GOOGLE_ADS.md`
-- Детальная настройка: `GOOGLE_ADS_SETUP.md`
+📖 **Complete Documentation**: 
+- Quick Start: `QUICKSTART_GOOGLE_ADS.md`
+- Detailed Setup: `GOOGLE_ADS_SETUP.md`
 
-### Новые команды CLI:
-
-```bash
-python main.py google-ads list-accounts        # Список аккаунтов
-python main.py google-ads campaigns            # Кампании
-python main.py google-ads keywords             # Ключевые слова
-python main.py google-ads search-terms         # Поисковые запросы
-python main.py google-ads diagnose-quality     # Диагностика качества
-python main.py google-ads diagnose-cost        # Дорогие кампании
-```
-
-### Web API эндпоинты:
+### New CLI Commands:
 
 ```bash
-GET  /api/google-ads/status                    # Статус интеграции
-GET  /api/google-ads/campaigns                 # Кампании
-GET  /api/google-ads/keywords                  # Ключевые слова
-POST /api/google-ads/nlp                       # Естественный язык
-GET  /api/google-ads/diagnose/quality-score    # Диагностика
+python main.py google-ads list-accounts        # List accounts
+python main.py google-ads campaigns            # Campaigns
+python main.py google-ads keywords             # Keywords
+python main.py google-ads search-terms         # Search queries
+python main.py google-ads diagnose-quality     # Quality diagnostics
+python main.py google-ads diagnose-cost        # Expensive campaigns
 ```
 
-## 📞 Контакты
+### Web API Endpoints:
 
-Для вопросов и предложений создайте Issue в репозитории.
+```bash
+GET  /api/google-ads/status                    # Integration status
+GET  /api/google-ads/campaigns                 # Campaigns
+GET  /api/google-ads/keywords                  # Keywords
+POST /api/google-ads/nlp                       # Natural language
+GET  /api/google-ads/diagnose/quality-score    # Diagnostics
+```
+
+## 📞 Contact
+
+For questions and suggestions, create an Issue in the repository.
 
 ---
 
-**Сделано с ❤️ для маркетологов и SEO специалистов**
-
+**Made with ❤️ for marketers and SEO specialists**
