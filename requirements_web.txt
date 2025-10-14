@@ -1,0 +1,4 @@
+# Web App Dependencies
+Flask>=2.3.0
+Werkzeug>=2.3.0
+gunicorn>=21.2.0

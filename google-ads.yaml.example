@@ -1,0 +1,40 @@
+# Google Ads API Configuration
+# See: https://developers.google.com/google-ads/api/docs/client-libs/python/configuration
+
+# Required: Your OAuth2 client ID from Google Cloud Console
+client_id: INSERT_CLIENT_ID_HERE
+
+# Required: Your OAuth2 client secret from Google Cloud Console
+client_secret: INSERT_CLIENT_SECRET_HERE
+
+# Required: Your OAuth2 refresh token
+# Generate using: python -m google.ads.googleads.client --generate_refresh_token
+refresh_token: INSERT_REFRESH_TOKEN_HERE
+
+# Required: Your Google Ads developer token
+# Apply for one at: https://developers.google.com/google-ads/api/docs/get-started/dev-token
+developer_token: INSERT_DEVELOPER_TOKEN_HERE
+
+# Optional but recommended: Your Google Ads login customer ID (without dashes)
+# This is the manager account ID if you're using a manager account
+# Example: 1234567890
+login_customer_id: INSERT_LOGIN_CUSTOMER_ID_HERE
+
+# Optional: Enable logging
+logging:
+  version: 1
+  disable_existing_loggers: False
+  formatters:
+    default:
+      format: '[%(asctime)s - %(levelname)s] %(message)s'
+      datefmt: '%Y-%m-%d %H:%M:%S'
+  handlers:
+    default:
+      class: logging.StreamHandler
+      formatter: default
+  loggers:
+    google.ads.googleads:
+      level: INFO
+      handlers:
+        - default
+
