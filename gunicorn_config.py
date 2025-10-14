@@ -30,3 +30,6 @@ daemon = False
 pidfile = None
 preload_app = True
 
+# Application
+wsgi_app = "web_app:app"
+
