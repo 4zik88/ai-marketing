@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     
     # Провайдер AI
-    ai_provider: Literal["openai", "anthropic", "google", "ollama", "groq"] = "google"
-    ai_model: str = "gemini-2.0-flash"
+    ai_provider: Literal["openai", "anthropic", "google", "ollama", "groq"] = "groq"
+    ai_model: str = "llama-3.1-8b-instant"
     
     # Директории
     base_dir: Path = Path(__file__).parent

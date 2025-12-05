@@ -70,8 +70,8 @@ def analyze_website():
     try:
         data = request.json
         url = data.get('url')
-        ai_provider = data.get('ai_provider', 'ollama')
-        ai_model = data.get('ai_model', 'llama3.1')
+        ai_provider = data.get('ai_provider', settings.ai_provider)
+        ai_model = data.get('ai_model', settings.ai_model)
         keywords_only = data.get('keywords_only', False)
         
         if not url:
