@@ -44,6 +44,11 @@ class Settings(BaseSettings):
     description_max_length: int = 90
     path_max_length: int = 15
     
+    # Authentication (HTTP Basic Auth)
+    auth_enabled: bool = False  # Set to True to enable authentication
+    auth_username: str = "admin"  # Default username
+    auth_password: str = ""  # Set via environment variable AUTH_PASSWORD
+    
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

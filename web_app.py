@@ -2,6 +2,8 @@
 Flask Web App for AI Marketing
 """
 from flask import Flask, render_template, request, jsonify, send_file
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import json
 import logging
@@ -17,7 +19,10 @@ from exporters import ExcelExporter
 from config import settings
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ai-marketing-secret-key'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'ai-marketing-secret-key-change-in-production')
+
+# Setup HTTP Basic Authentication
+auth = HTTPBasicAuth()
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -26,12 +31,40 @@ logger = logging.getLogger(__name__)
 # Global variables for session data
 session_data = {}
 
+# Authentication verification function
+@auth.verify_password
+def verify_password(username, password):
+    """Verify username and password for HTTP Basic Auth"""
+    # If authentication is disabled, allow access
+    if not settings.auth_enabled:
+        return True
+    
+    # Check credentials
+    if username == settings.auth_username and password == settings.auth_password:
+        return username
+    
+    # If password is empty, authentication is not properly configured
+    if not settings.auth_password:
+        logger.warning("Authentication enabled but AUTH_PASSWORD not set!")
+        return False
+    
+    return False
+
+# Decorator to protect routes (only if auth is enabled)
+def require_auth(f):
+    """Decorator to require authentication if enabled"""
+    if settings.auth_enabled:
+        return auth.login_required(f)
+    return f
+
 @app.route('/')
+@require_auth
 def index():
     """Main page"""
     return render_template('index.html')
 
 @app.route('/api/analyze', methods=['POST'])
+@require_auth
 def analyze_website():
     """API endpoint for website analysis"""
     try:
@@ -116,6 +149,7 @@ def analyze_website():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/download/<filename>')
+@require_auth
 def download_file(filename):
     """Download generated files"""
     try:
@@ -129,6 +163,7 @@ def download_file(filename):
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/ai-providers')
+@require_auth
 def get_ai_providers():
     """Get available AI providers and models"""
     providers = {
@@ -171,6 +206,7 @@ def get_ai_providers():
     return jsonify(providers)
 
 @app.route('/api/config', methods=['GET', 'POST'])
+@require_auth
 def config():
     """Get or update configuration"""
     if request.method == 'GET':
@@ -195,6 +231,7 @@ def config():
 
 @app.route('/health')
 def health():
+    """Health check endpoint (no auth required)"""
     """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
@@ -206,6 +243,7 @@ def health():
 # Google Ads MCP Integration Endpoints
 
 @app.route('/api/google-ads/status')
+@require_auth
 def google_ads_status():
     """Check if Google Ads integration is available"""
     try:
@@ -239,6 +277,7 @@ def google_ads_status():
 
 
 @app.route('/api/google-ads/accounts')
+@require_auth
 def google_ads_accounts():
     """List all accessible Google Ads accounts"""
     try:
@@ -252,6 +291,7 @@ def google_ads_accounts():
 
 
 @app.route('/api/google-ads/account/summary')
+@require_auth
 def google_ads_account_summary():
     """Get account summary"""
     date_range = request.args.get('date_range', 'LAST_30_DAYS')
@@ -266,6 +306,7 @@ def google_ads_account_summary():
 
 
 @app.route('/api/google-ads/campaigns')
+@require_auth
 def google_ads_campaigns():
     """Get campaigns with performance metrics"""
     campaign_id = request.args.get('campaign_id')
@@ -288,6 +329,7 @@ def google_ads_campaigns():
 
 
 @app.route('/api/google-ads/ad-groups')
+@require_auth
 def google_ads_ad_groups():
     """Get ad groups with performance metrics"""
     campaign_id = request.args.get('campaign_id')
@@ -304,6 +346,7 @@ def google_ads_ad_groups():
 
 
 @app.route('/api/google-ads/keywords')
+@require_auth
 def google_ads_keywords():
     """Get keyword performance"""
     campaign_id = request.args.get('campaign_id')
@@ -321,6 +364,7 @@ def google_ads_keywords():
 
 
 @app.route('/api/google-ads/search-terms')
+@require_auth
 def google_ads_search_terms():
     """Get search terms report"""
     campaign_id = request.args.get('campaign_id')
@@ -337,6 +381,7 @@ def google_ads_search_terms():
 
 
 @app.route('/api/google-ads/ads')
+@require_auth
 def google_ads_ads():
     """Get ads with performance metrics"""
     campaign_id = request.args.get('campaign_id')
@@ -354,6 +399,7 @@ def google_ads_ads():
 
 
 @app.route('/api/google-ads/performance/geographic')
+@require_auth
 def google_ads_geographic():
     """Get geographic performance"""
     campaign_id = request.args.get('campaign_id')
@@ -370,6 +416,7 @@ def google_ads_geographic():
 
 
 @app.route('/api/google-ads/performance/device')
+@require_auth
 def google_ads_device():
     """Get device performance"""
     campaign_id = request.args.get('campaign_id')
@@ -386,6 +433,7 @@ def google_ads_device():
 
 
 @app.route('/api/google-ads/diagnose/quality-score')
+@require_auth
 def google_ads_diagnose_quality():
     """Diagnose low quality score keywords"""
     min_impressions = int(request.args.get('min_impressions', 100))
@@ -401,6 +449,7 @@ def google_ads_diagnose_quality():
 
 
 @app.route('/api/google-ads/diagnose/high-cost')
+@require_auth
 def google_ads_diagnose_cost():
     """Diagnose high cost campaigns"""
     try:
@@ -414,6 +463,7 @@ def google_ads_diagnose_cost():
 
 
 @app.route('/api/google-ads/diagnose/disapproved-ads')
+@require_auth
 def google_ads_diagnose_disapproved():
     """Find disapproved ads"""
     try:
@@ -427,6 +477,7 @@ def google_ads_diagnose_disapproved():
 
 
 @app.route('/api/google-ads/query', methods=['POST'])
+@require_auth
 def google_ads_custom_query():
     """Execute a custom GAQL query"""
     try:
@@ -447,6 +498,7 @@ def google_ads_custom_query():
 
 
 @app.route('/api/google-ads/nlp', methods=['POST'])
+@require_auth
 def google_ads_natural_language():
     """Process a natural language request"""
     try:
@@ -466,6 +518,7 @@ def google_ads_natural_language():
 
 
 @app.route('/api/google-ads/tools')
+@require_auth
 def google_ads_tools():
     """Get list of available Google Ads MCP tools"""
     try:

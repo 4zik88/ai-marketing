@@ -32,3 +32,7 @@ PyYAML>=6.0.1
 # Production WSGI Server
 gunicorn>=20.1.0
 
+# Authentication
+Flask-HTTPAuth>=4.8.0
+werkzeug>=3.0.0
+
