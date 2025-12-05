@@ -91,6 +91,37 @@ class AIGenerator:
             elif self.provider == "groq":
                 return self._generate_groq(prompt, system_prompt, temperature, json_mode)
         except Exception as e:
+            error_str = str(e)
+            # Auto-fallback for Google Gemini rate limit errors
+            if self.provider == "google" and ("429" in error_str or "quota" in error_str.lower() or "rate limit" in error_str.lower()):
+                logger.warning("Google Gemini rate limit exceeded. Attempting automatic fallback to Groq...")
+                # Try Groq as fallback
+                if settings.groq_api_key:
+                    try:
+                        logger.info("Switching to Groq provider as fallback")
+                        original_provider = self.provider
+                        self.provider = "groq"
+                        self.model = "llama-3.1-70b-versatile"
+                        from groq import Groq
+                        self.client = Groq(api_key=settings.groq_api_key)
+                        return self._generate_groq(prompt, system_prompt, temperature, json_mode)
+                    except Exception as groq_error:
+                        logger.error(f"Groq fallback failed: {groq_error}")
+                        # Restore original provider
+                        self.provider = original_provider
+                # If Groq fails, try Ollama
+                try:
+                    logger.info("Trying Ollama as fallback...")
+                    original_provider = self.provider
+                    self.provider = "ollama"
+                    self.model = "llama3.1"
+                    import ollama
+                    self.client = ollama
+                    return self._generate_ollama(prompt, system_prompt, temperature, json_mode)
+                except Exception as ollama_error:
+                    logger.error(f"Ollama fallback failed: {ollama_error}")
+                    self.provider = original_provider
+            
             logger.error(f"Ошибка генерации: {e}")
             raise
     
@@ -178,9 +209,22 @@ class AIGenerator:
                 return "No response generated"
                 
         except Exception as e:
+            error_str = str(e)
             logger.error(f"Google Gemini error: {e}")
+            
+            # Check for rate limit error (429)
+            if "429" in error_str or "quota" in error_str.lower() or "rate limit" in error_str.lower():
+                logger.warning("Google Gemini rate limit exceeded. Consider switching to Groq or Ollama.")
+                raise Exception(
+                    f"Google Gemini API rate limit exceeded (429). "
+                    f"Please wait or switch to another provider.\n"
+                    f"To switch: Set AI_PROVIDER=groq or AI_PROVIDER=ollama in Railway Variables.\n"
+                    f"Error details: {error_str}"
+                )
+            
             # Попробуем альтернативную модель
             try:
+                logger.info("Trying fallback model: gemini-1.5-pro")
                 model = self.client.GenerativeModel("gemini-1.5-pro")
                 response = model.generate_content(full_prompt)
                 return response.text if response.text else "No response generated"
