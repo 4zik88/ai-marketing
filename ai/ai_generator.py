@@ -95,11 +95,14 @@ class AIGenerator:
             # Auto-fallback for Google Gemini rate limit errors
             if self.provider == "google" and ("429" in error_str or "quota" in error_str.lower() or "rate limit" in error_str.lower()):
                 logger.warning("Google Gemini rate limit exceeded. Attempting automatic fallback to Groq...")
+                # Save original state
+                original_provider = self.provider
+                original_model = self.model
+                original_client = self.client
                 # Try Groq as fallback
                 if settings.groq_api_key:
                     try:
                         logger.info("Switching to Groq provider as fallback")
-                        original_provider = self.provider
                         self.provider = "groq"
                         self.model = "llama-3.1-70b-versatile"
                         from groq import Groq
@@ -107,12 +110,13 @@ class AIGenerator:
                         return self._generate_groq(prompt, system_prompt, temperature, json_mode)
                     except Exception as groq_error:
                         logger.error(f"Groq fallback failed: {groq_error}")
-                        # Restore original provider
+                        # Restore original state
                         self.provider = original_provider
+                        self.model = original_model
+                        self.client = original_client
                 # If Groq fails, try Ollama
                 try:
                     logger.info("Trying Ollama as fallback...")
-                    original_provider = self.provider
                     self.provider = "ollama"
                     self.model = "llama3.1"
                     import ollama
@@ -120,8 +124,11 @@ class AIGenerator:
                     return self._generate_ollama(prompt, system_prompt, temperature, json_mode)
                 except Exception as ollama_error:
                     logger.error(f"Ollama fallback failed: {ollama_error}")
+                    # Restore original state
                     self.provider = original_provider
-            
+                    self.model = original_model
+                    self.client = original_client
+
             logger.error(f"Ошибка генерации: {e}")
             raise
     

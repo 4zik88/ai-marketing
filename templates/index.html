@@ -234,19 +234,24 @@
 
         async function loadAIProviders() {
             try {
-                const response = await fetch('/api/ai-providers');
-                const providers = await response.json();
-                
+                // Load providers and config in parallel
+                const [providersResponse, configResponse] = await Promise.all([
+                    fetch('/api/ai-providers'),
+                    fetch('/api/config')
+                ]);
+                const providers = await providersResponse.json();
+                const config = await configResponse.json();
+
                 const container = document.getElementById('aiProviders');
                 container.innerHTML = '';
-                
+
                 Object.entries(providers).forEach(([key, provider]) => {
                     const col = document.createElement('div');
                     col.className = 'col-6 col-md-4';
-                    
+
                     const badgeClass = provider.free ? 'free-badge' : 'premium-badge';
                     const badgeText = provider.free ? 'FREE' : 'PAID';
-                    
+
                     col.innerHTML = `
                         <div class="card ai-provider-card h-100" data-provider="${key}">
                             <div class="card-body text-center p-2">
@@ -256,36 +261,46 @@
                             </div>
                         </div>
                     `;
-                    
+
                     col.addEventListener('click', () => selectAIProvider(key, provider));
                     container.appendChild(col);
                 });
-                
-                // Select Google Gemini by default
-                selectAIProvider('google', providers['google']);
-                
+
+                // Select provider from config (default settings)
+                const defaultProvider = config.ai_provider || 'google';
+                const defaultModel = config.ai_model || 'gemini-2.0-flash';
+
+                if (providers[defaultProvider]) {
+                    selectAIProvider(defaultProvider, providers[defaultProvider], defaultModel);
+                } else {
+                    selectAIProvider('google', providers['google']);
+                }
+
             } catch (error) {
                 console.error('Error loading AI providers:', error);
             }
         }
 
-        function selectAIProvider(providerKey, provider) {
+        function selectAIProvider(providerKey, provider, defaultModel = null) {
             // Remove selected class from all cards
             document.querySelectorAll('.ai-provider-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            
+
             // Add selected class to clicked card
             document.querySelector(`[data-provider="${providerKey}"]`).classList.add('selected');
-            
+
             // Update model dropdown
             const modelSelect = document.getElementById('aiModel');
             modelSelect.innerHTML = '';
-            
+
             provider.models.forEach(model => {
                 const option = document.createElement('option');
                 option.value = model;
                 option.textContent = model;
+                if (defaultModel && model === defaultModel) {
+                    option.selected = true;
+                }
                 modelSelect.appendChild(option);
             });
         }
