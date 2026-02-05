@@ -170,17 +170,12 @@ class AIGenerator:
         response = self.client.messages.create(**kwargs)
         return response.content[0].text
     
-    def _generate_google(self, prompt: str, system_prompt: Optional[str], 
+    def _generate_google(self, prompt: str, system_prompt: Optional[str],
                         temperature: float, json_mode: bool) -> str:
-        """Генерация через Google Gemini (БЕСПЛАТНО!)"""
-        # Используем правильные модели для API v1beta
-        if "flash" in self.model.lower():
-            model_name = "gemini-2.0-flash"
-        elif "pro" in self.model.lower():
-            model_name = "gemini-2.5-pro"
-        else:
-            model_name = "gemini-2.0-flash"  # По умолчанию
-        
+        """Генерация через Google Gemini"""
+        # Используем модель из настроек напрямую
+        model_name = self.model
+
         model = self.client.GenerativeModel(model_name)
         
         # Объединяем system prompt и user prompt
